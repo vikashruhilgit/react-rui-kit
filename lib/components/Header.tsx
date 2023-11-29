@@ -32,7 +32,7 @@ export const Header = ({ user, onLogin, onLogout, onCreateAccount }: HeaderProps
             />
           </g>
         </svg>
-        <h1>Acme</h1>
+        <h1 className='text-3xl text-blue-600'>Acme</h1>
       </div>
       <div>
         {user ? (
