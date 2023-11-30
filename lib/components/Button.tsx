@@ -1,26 +1,41 @@
-import classes from './button.module.scss';
+import "../main.css";
 
 interface ButtonProps {
+  /**
+   * Button contents
+   */
+  label?: string;
   /**
    * Is this the principal call to action on the page?
    */
   primary?: boolean;
   /**
-   * What background color to use
-   */
-  backgroundColor?: string;
-  /**
    * How large should the button be?
    */
-  size?: 'small' | 'medium' | 'large';
+  size?: 'xs' | 'small' | 'medium' | 'large' | 'xl';
   /**
-   * Button contents
+   * if its a link or not
    */
-  label: string;
+  link?: boolean;
+  /**
+   * nightmode light and dark
+   */
+  nightmode?: boolean
+  /**
+   * Optional border radius default or rounded
+   */
+  roundedFull?: boolean;
+  /**
+   * Optional if button require to take whole space of outer container
+   */
+  fullWidth?: boolean;
   /**
    * Optional click handler
    */
   onClick?: () => void;
+
+  children?: JSX.Element | string
+
 }
 
 /**
@@ -29,19 +44,37 @@ interface ButtonProps {
 export const Button = ({
   primary = false,
   size = 'medium',
-  backgroundColor,
-  label,
+  label = "default",
+  roundedFull,
+  fullWidth,
+  children,
   ...props
 }: ButtonProps) => {
-  const mode = primary ? classes['storybook-button--primary'] : classes['storybook-button--secondary'];
+
+  let sizeClass = "text-sm px-2.5 py-1.5";
+  switch (size) {
+    case "xl":
+      sizeClass = "text-sm px-3.5 py-2.5"
+      break;
+    case "large":
+      sizeClass = "text-sm px-3 py-2"
+      break;
+    case "small":
+      sizeClass = "text-sm px-2 py-1"
+      break;
+    case "xs":
+      sizeClass = "text-xs px-2 py-1"
+      break;
+  }
+  const radius = roundedFull ? "rounded-full" : "rounded-lg";
+  const background = primary ? "bg-blue-600 hover:bg-blue-500 text-white" : "ring-gray-300 ring-inset shadow-sm ring-1 text-gray-900 bg-white hover:bg-slate-100"
+
   return (
     <button
-      type="button"
-      className={[classes['storybook-button'], classes[`storybook-button--${size}`], mode].join(' ')}
-      style={{ backgroundColor }}
+      className={`${background} ${sizeClass} ${radius} text-center ${fullWidth ? "w-full" : ""} capitalize rounded-full font-medium cursor-pointer select-none`}
       {...props}
     >
-      {label}
+      {label ? label : children}
     </button>
   );
 };

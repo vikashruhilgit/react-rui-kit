@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { ButtonNew } from "../../lib/components/ButtonNew";
+import { Button } from "../../lib/components/Button";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
-  title: 'Example/ButtonNew',
-  component: ButtonNew,
+  title: 'Example/Button',
+  component: Button,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
@@ -17,7 +17,7 @@ const meta = {
   /* argTypes: {
     backgroundColor: { control: 'color' },
   }, */
-} satisfies Meta<typeof ButtonNew>;
+} satisfies Meta<typeof Button>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -29,6 +29,6 @@ export const Example: Story = {
     label: 'Button'
   },
   render: (args)=>{
-    return <ButtonNew {...args}>Hello</ButtonNew>
+    return <Button {...args}>Hello</Button>
   }
 };
