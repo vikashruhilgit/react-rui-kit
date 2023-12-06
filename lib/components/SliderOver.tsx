@@ -1,7 +1,8 @@
 
 import { Fragment, FC } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+
+import "../main.css";
 
 interface SliderOverProps {
   /**
@@ -24,12 +25,12 @@ export const SliderOver: FC<SliderOverProps> = ({
   crossOnSlider
 }) => {
 
-  const closeHandler = () =>{
+  const closeHandler = () => {
     onClose && onClose()
   }
 
   console.log(crossOnSlider);
-  
+
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -68,15 +69,17 @@ export const SliderOver: FC<SliderOverProps> = ({
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <div className={`${crossOnSlider ? "right-0": "left-0"} absolute top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4`}>
+                    <div className={`${crossOnSlider ? "right-0" : "left-0"} absolute top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4`}>
                       <button
                         type="button"
-                        className={`${crossOnSlider ? "text-slate-500 hover:text-slate-700 focus:ring-slate-500": "text-gray-300 hover:text-white focus:ring-white"} relative rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
+                        className={`${crossOnSlider ? "text-slate-500 hover:text-slate-700 focus:ring-slate-500" : "text-gray-300 hover:text-white focus:ring-white"} relative rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
                         onClick={closeHandler}
                       >
                         <span className="absolute -inset-2.5" />
                         <span className="sr-only">Close panel</span>
-                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                        <svg className="h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                       </button>
                     </div>
                   </Transition.Child>
