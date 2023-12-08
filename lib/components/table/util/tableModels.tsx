@@ -85,7 +85,7 @@ export const columns: ColumnDef<Person>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="px-1">
+      <div>
         <IndeterminateCheckbox
           checked={row.getIsSelected()}
           indeterminate={row.getIsSomeSelected()}
@@ -100,6 +100,7 @@ export const columns: ColumnDef<Person>[] = [
     columns: [
       {
         accessorKey: 'firstName',
+        id: 'firstName',
         cell: info => info.getValue(),
         footer: props => props.column.id,
       },
@@ -158,19 +159,19 @@ export const getTableMeta = (
   setData: React.Dispatch<React.SetStateAction<Person[]>>,
   skipAutoResetPageIndex: () => void
 ) =>
-  ({
-    updateData: (rowIndex, columnId, value) => {
-      // Skip age index reset until after next rerender
-      skipAutoResetPageIndex()
-      setData(old =>
-        old.map((row, index) => {
-          if (index !== rowIndex) return row
+({
+  updateData: (rowIndex, columnId, value) => {
+    // Skip age index reset until after next rerender
+    skipAutoResetPageIndex()
+    setData(old =>
+      old.map((row, index) => {
+        if (index !== rowIndex) return row
 
-          return {
-            ...old[rowIndex]!,
-            [columnId]: value,
-          }
-        })
-      )
-    },
-  } as TableMeta)
+        return {
+          ...old[rowIndex]!,
+          [columnId]: value,
+        }
+      })
+    )
+  },
+} as TableMeta)

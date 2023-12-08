@@ -1,12 +1,13 @@
 import {
   flexRender,
+  Header,
   HeaderGroup,
   Row,
   RowData,
   Table,
 } from '@tanstack/react-table'
 import Pagination from './Pagination'
-import Filter from './Filter'
+// import Filter from './Filter'
 // import TablePins from './TablePins'
 
 type TableGroup = 'center' | 'left' | 'right'
@@ -48,18 +49,58 @@ export function CustomTable<T extends RowData>({
 }: Props<T>) {
   const [headerGroups] = getTableHeaderGroups(table, tableGroup);
   const headerDepth = headerGroups.length;
-  console.log("headerGroups", headerGroups);
-  console.log("headerDepth", headerDepth);
+
+  const checkNumberType = (columnId: string) => {
+    return typeof table
+      .getPreFilteredRowModel()
+      .flatRows[0]?.getValue(columnId) === "number"
+  }
+
+  const getHeaderClass = (depth: number, isNumber: boolean) => {
+    if (headerDepth !== depth) return "justify-center";
+    return isNumber ? "justify-end" : "justify-start";
+  }
+
+  const renderHeader = (header: Header<T, unknown>) => {
+    const isNumber = checkNumberType(header.column.id);
+    const headerClass = getHeaderClass(header.depth, isNumber);
+
+    return (
+      <section onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : () => null} className={`${header.column.getCanSort() ? 'cursor-pointer select-none'
+        : ''} flex ${headerClass}`}>
+        {!isNumber &&
+          flexRender(
+            header.column.columnDef.header,
+            header.getContext()
+          )}
+        <button className='w-3'>
+          {{
+            asc: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-5">
+              <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
+            </svg>,
+            desc: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-5">
+              <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clip-rule="evenodd" />
+            </svg>,
+          }[header.column.getIsSorted() as string] ?? ' '}
+        </button>
+        {isNumber &&
+          flexRender(
+            header.column.columnDef.header,
+            header.getContext()
+          )}
+      </section>
+    )
+  }
 
   return (
-    <section className='border border-slate-200 rounded-md divide-y divide-gray-100 max-w-full overflow-x-scroll'>
+    <section className='border border-slate-200 rounded-md max-w-full overflow-x-scroll'>
       <table className='w-full border-none text-slate-800 text-sm'>
-        <thead className="divide-y divide-gray-200 bg-slate-50">
+        <thead className="divide-y divide-gray-200 bg-gray-100">
           {headerGroups.map(headerGroup => (
             <tr className='' key={headerGroup.id}>
               {headerGroup.headers.map(header => (
                 <th
-                  className="py-1.5 px-2.5 font-medium truncate relative "
+                  className="py-1.5 px-2.5 font-medium truncate relative"
                   key={header.id}
                   style={{
                     width: header.getSize(),
@@ -82,42 +123,21 @@ export function CustomTable<T extends RowData>({
                             : `👊`}
                         </button>
                       ) : null}{' '} */}
-                        <section onClick={header.column.getCanSort() ? header.column.getToggleSortingHandler() : () => null} className={`${header.column.getCanSort() ? 'cursor-pointer select-none'
-                          : ''} flex ${headerDepth === header.depth ? "justify-start" : "justify-center"}`}>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}{' '}
-                          <button className='w-5'
-                          >
-                            {{
-                              asc: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-5">
-                                <path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" />
-                              </svg>
-
-                              ,
-                              desc: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-5">
-                                <path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clip-rule="evenodd" />
-                              </svg>
-
-                              ,
-                            }[header.column.getIsSorted() as string] ?? ' '}
-                          </button>
-                        </section>
+                        {renderHeader(header)}
                       </div>
-                      {header.column.getCanFilter() ? (
+                      {/* {header.column.getCanFilter() ? (
                         <div>
                           <Filter column={header.column} table={table} />
                         </div>
-                      ) : null}
+                      ) : null} */}
                     </>
                   )}
                   <section
-                    className="absolute right-0 top-0 h-full select-none touch-non cursor-col-resize flex"
+                    className="absolute right-0 top-0 h-full select-none touch-non cursor-ew-resize flex"
                     onMouseDown={header.getResizeHandler()}
                     onTouchStart={header.getResizeHandler()}
                   >
-                    <section className='bg-gray-200 w-0.5 hover:w-0.75 hover:bg-gray-500 h-2/5 self-center'></section>
+                    <section className='bg-gray-300 w-0.5 hover:w-0.75 hover:bg-gray-500 h-2/5 self-center'></section>
                   </section>
                   {/* {!header.isPlaceholder && header.column.getCanPin() && (
                   <TablePins
@@ -135,6 +155,7 @@ export function CustomTable<T extends RowData>({
             <tr key={row.id}>
               {getRowGroup(row, tableGroup).map(cell => (
                 <td
+                  className={`py-1.5 px-2.5 font-medium truncate relative ${checkNumberType(cell.column.id) ? "text-right" : "text-left"}`}
                   key={cell.id}
                   style={{
                     width: cell.column.getSize(),
@@ -163,7 +184,6 @@ export function CustomTable<T extends RowData>({
               />
             </th>
           </tr>
-
         </tfoot>
         {/* <tfoot>
         {footerGroup.map(footerGroup => (
@@ -182,7 +202,7 @@ export function CustomTable<T extends RowData>({
         ))}
       </tfoot> */}
       </table>
-    </section>
+    </section >
   )
 }
 
