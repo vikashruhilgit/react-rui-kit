@@ -27,6 +27,7 @@ export const DebouncedInput: React.FC<Props> = ({
     }, debounce)
 
     return () => clearTimeout(timeout)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
   return <input {...props} value={value} onChange={handleInputChange} />

@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react"
+import { faker } from "@faker-js/faker";
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -12,13 +12,13 @@ import {
   GroupingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { makeData } from "./util/makeData";
-import { useSkipper } from "./hook/useSkipper";
-import { faker } from "@faker-js/faker";
-import DebouncedInput from "./component/DebouncedInput";
-import { fuzzyFilter, getTableMeta, columns } from "./util/tableModels";
+import { useEffect, useReducer, useState } from "react"
 import ActionButtons from "./component/ActionButtons";
 import CustomTable from "./component/CustomTable";
+import DebouncedInput from "./component/DebouncedInput";
+import { useSkipper } from "./hook/useSkipper";
+import { makeData } from "./util/makeData";
+import { fuzzyFilter, getTableMeta, columns } from "./util/tableModels";
 
 import "../../main.css";
 
@@ -83,6 +83,7 @@ export const Table = () => {
         table.setSorting([{ id: 'fullName', desc: false }])
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table.getState().columnFilters[0]?.id])
 
   const randomizeColumns = () => {
@@ -131,7 +132,7 @@ export const Table = () => {
             )
           })}
         </div>
-        <div className="p-2">
+        {/* <div className="p-2">
           <div>
             <input
               type="checkbox"
@@ -144,9 +145,9 @@ export const Table = () => {
           <button onClick={randomizeColumns} className="border rounded p-1">
             Shuffle Columns
           </button>
-        </div>
+        </div> */}
       </div>
-      <div className={`flex ${isSplit ? 'gap-4' : ''}`}>
+      <div className={`flex justify-center ${isSplit ? 'gap-4' : ''}`}>
         {isSplit ? <CustomTable table={table} tableGroup="left" /> : null}
         <CustomTable
           table={table}
@@ -157,19 +158,9 @@ export const Table = () => {
       <div className="p-2" />
       <ActionButtons
         getSelectedRowModel={table.getSelectedRowModel}
-        hasNextPage={table.getCanNextPage()}
-        hasPreviousPage={table.getCanPreviousPage()}
-        nextPage={table.nextPage}
-        pageCount={table.getPageCount()}
-        pageIndex={table.getState().pagination.pageIndex}
-        pageSize={table.getState().pagination.pageSize}
-        previousPage={table.previousPage}
         refreshData={refreshData}
         rerender={rerender}
         rowSelection={rowSelection}
-        setPageIndex={table.setPageIndex}
-        setPageSize={table.setPageSize}
-        totalRows={table.getPrePaginationRowModel().rows.length}
       />
       <div className="p-2" />
       <pre>{JSON.stringify(table.getState(), null, 2)}</pre>

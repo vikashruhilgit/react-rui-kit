@@ -1,12 +1,17 @@
-import { FC, Fragment, MouseEvent, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 
 import "../main.css";
 
+
+import { FC, Fragment, MouseEvent, useState } from "react";
+
+
+
+
 export interface SelectItems {
   id: number;
   name: string;
-  avatar: string;
+  avatar?: string;
 }
 
 interface SelectState {
@@ -125,7 +130,7 @@ export const Select: FC<SelectProps> = ({
   return (
     <Listbox value={list} onChange={changeHandler}>
       {label && <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">{label}</Listbox.Label>}
-      <div className="relative mt-2">
+      <div className={`relative ${label && 'mt-2'} `}>
         {listButton()}
         <Transition
           as={Fragment}

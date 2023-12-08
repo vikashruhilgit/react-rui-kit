@@ -1,5 +1,5 @@
-import { FC, Fragment, MouseEvent } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { FC, Fragment, MouseEvent } from 'react'
 
 import "../main.css";
 
