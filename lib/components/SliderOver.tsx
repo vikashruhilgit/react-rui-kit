@@ -17,20 +17,22 @@ interface SliderOverProps {
   * onclose callback
   */
   onClose?: () => void;
+  /**
+   * chil content in popover
+   */
+  children: string | JSX.Element;
 }
 
 export const SliderOver: FC<SliderOverProps> = ({
   open,
   onClose,
-  crossOnSlider
+  crossOnSlider,
+  children
 }) => {
 
   const closeHandler = () => {
     onClose && onClose()
   }
-
-  console.log(crossOnSlider);
-
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -72,7 +74,7 @@ export const SliderOver: FC<SliderOverProps> = ({
                     <div className={`${crossOnSlider ? "right-0" : "left-0"} absolute top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4`}>
                       <button
                         type="button"
-                        className={`${crossOnSlider ? "text-slate-500 hover:text-slate-700 focus:ring-slate-500" : "text-gray-300 hover:text-white focus:ring-white"} relative rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
+                        className={`${crossOnSlider ? "text-gray-500 hover:text-gray-700 focus:ring-gray-500" : "text-gray-300 hover:text-white focus:ring-white"} relative rounded-md focus:outline-none focus:ring-2 focus:ring-white`}
                         onClick={closeHandler}
                       >
                         <span className="absolute -inset-2.5" />
@@ -83,13 +85,13 @@ export const SliderOver: FC<SliderOverProps> = ({
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
-                    <div className="px-4 sm:px-6">
-                      <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                        Panel title
-                      </Dialog.Title>
-                    </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">{/* Your content */}</div>
+                  <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                    {/* <div className="px-4 sm:px-6"> */}
+                    {children}
+                    {/* <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
+                      </Dialog.Title> */}
+                    {/* </div> */}
+                    {/* <div className="relative mt-6 flex-1 px-4 sm:px-6">Your content</div> */}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

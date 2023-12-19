@@ -7,7 +7,7 @@ import {
   Table,
 } from '@tanstack/react-table'
 import Pagination from './Pagination'
-// import Filter from './Filter'
+import Filter from './Filter'
 // import TablePins from './TablePins'
 
 type TableGroup = 'center' | 'left' | 'right'
@@ -93,24 +93,25 @@ export function CustomTable<T extends RowData>({
   }
 
   return (
-    <section className='border border-slate-200 rounded-md max-w-full overflow-x-scroll'>
-      <table className='w-full border-none text-slate-800 text-sm'>
-        <thead className="divide-y divide-gray-200 bg-gray-100">
-          {headerGroups.map(headerGroup => (
-            <tr className='' key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th
-                  className="py-1.5 px-2.5 font-medium truncate relative"
-                  key={header.id}
-                  style={{
-                    width: header.getSize(),
-                  }}
-                  colSpan={header.colSpan}
-                >
-                  {header.isPlaceholder ? null : (
-                    <>
-                      <div className=''>
-                        {/* {header.column.getCanGroup() ? (
+    <section className='border border-slate-200 rounded-md'>
+      <section className='max-w-full min-w-full overflow-hidden overflow-x-scroll'>
+        <table className='border-none text-slate-800 text-sm '>
+          <thead className="divide-y divide-gray-200 bg-gray-100">
+            {headerGroups.map(headerGroup => (
+              <tr className='' key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th
+                    className="py-1.5 px-2.5 font-medium truncate relative"
+                    key={header.id}
+                    style={{
+                      width: header.getSize(),
+                    }}
+                    colSpan={header.colSpan}
+                  >
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div className=''>
+                          {/* {header.column.getCanGroup() ? (
                         // If the header can be grouped, let's add a toggle
                         <button
                           onClick={header.column.getToggleGroupingHandler()}
@@ -123,69 +124,51 @@ export function CustomTable<T extends RowData>({
                             : `👊`}
                         </button>
                       ) : null}{' '} */}
-                        {renderHeader(header)}
-                      </div>
-                      {/* {header.column.getCanFilter() ? (
-                        <div>
-                          <Filter column={header.column} table={table} />
+                          {renderHeader(header)}
                         </div>
-                      ) : null} */}
-                    </>
-                  )}
-                  <section
-                    className="absolute right-0 top-0 h-full select-none touch-non cursor-ew-resize flex"
-                    onMouseDown={header.getResizeHandler()}
-                    onTouchStart={header.getResizeHandler()}
-                  >
-                    <section className='bg-gray-300 w-0.5 hover:w-0.75 hover:bg-gray-500 h-2/5 self-center'></section>
-                  </section>
-                  {/* {!header.isPlaceholder && header.column.getCanPin() && (
+                        {header.column.getCanFilter() ? (
+                          <div>
+                            <Filter column={header.column} table={table} />
+                          </div>
+                        ) : null}
+                      </>
+                    )}
+                    <section
+                      className="absolute right-0 top-0 h-full select-none touch-non cursor-ew-resize flex"
+                      onMouseDown={header.getResizeHandler()}
+                      onTouchStart={header.getResizeHandler()}
+                    >
+                      <section className='bg-gray-300 w-0.5 hover:w-0.75 hover:bg-gray-500 h-2/5 self-center'></section>
+                    </section>
+                    {/* {!header.isPlaceholder && header.column.getCanPin() && (
                   <TablePins
                     isPinned={header.column.getIsPinned()}
                     pin={header.column.pin}
                   />
                 )} */}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id}>
-              {getRowGroup(row, tableGroup).map(cell => (
-                <td
-                  className={`py-1.5 px-2.5 font-medium truncate relative ${checkNumberType(cell.column.id) ? "text-right" : "text-left"}`}
-                  key={cell.id}
-                  style={{
-                    width: cell.column.getSize(),
-                  }}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th colSpan={1000}>
-              <Pagination
-                hasNextPage={table.getCanNextPage()}
-                hasPreviousPage={table.getCanPreviousPage()}
-                nextPage={table.nextPage}
-                pageCount={table.getPageCount()}
-                pageIndex={table.getState().pagination.pageIndex}
-                pageSize={table.getState().pagination.pageSize}
-                previousPage={table.previousPage}
-                setPageIndex={table.setPageIndex}
-                setPageSize={table.setPageSize}
-                totalRows={table.getPrePaginationRowModel().rows.length}
-              />
-            </th>
-          </tr>
-        </tfoot>
-        {/* <tfoot>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {table.getRowModel().rows.map(row => (
+              <tr key={row.id}>
+                {getRowGroup(row, tableGroup).map(cell => (
+                  <td
+                    className={`py-1.5 px-2.5 font-normal truncate relative ${checkNumberType(cell.column.id) ? "text-right" : "text-left"}`}
+                    key={cell.id}
+                    style={{
+                      width: cell.column.getSize(),
+                    }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+          {/* <tfoot>
         {footerGroup.map(footerGroup => (
           <tr key={footerGroup.id}>
             {footerGroup.headers.map(header => (
@@ -201,7 +184,20 @@ export function CustomTable<T extends RowData>({
           </tr>
         ))}
       </tfoot> */}
-      </table>
+        </table>
+      </section>
+      <Pagination
+        hasNextPage={table.getCanNextPage()}
+        hasPreviousPage={table.getCanPreviousPage()}
+        nextPage={table.nextPage}
+        pageCount={table.getPageCount()}
+        pageIndex={table.getState().pagination.pageIndex}
+        pageSize={table.getState().pagination.pageSize}
+        previousPage={table.previousPage}
+        setPageIndex={table.setPageIndex}
+        setPageSize={table.setPageSize}
+        totalRows={table.getPrePaginationRowModel().rows.length}
+      />
     </section >
   )
 }

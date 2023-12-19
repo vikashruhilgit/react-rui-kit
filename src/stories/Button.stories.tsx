@@ -4,7 +4,7 @@ import { Button } from "../../lib/components/Button";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
-  title: 'Example/Button',
+  title: 'Components/Button',
   component: Button,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   parameters: {
@@ -28,7 +28,7 @@ export const Example: Story = {
     primary: true,
     label: 'Button'
   },
-  render: (args)=>{
+  render: (args) => {
     return <Button {...args}>Hello</Button>
   }
 };

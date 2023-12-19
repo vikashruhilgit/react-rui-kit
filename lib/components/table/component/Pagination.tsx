@@ -26,7 +26,7 @@ export function Pagination({
   totalRows,
 }: Props) {
   return (
-    <section className="flex items-center justify-between p-2 font-medium">
+    <section className="flex items-center justify-between p-2 font-medium text-sm">
       <div className="flex items-center gap-2">
         <button
           className="border rounded p-1"

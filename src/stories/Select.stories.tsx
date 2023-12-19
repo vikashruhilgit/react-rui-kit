@@ -67,7 +67,7 @@ const people: SelectItems[] = [
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
-  title: 'Example/Select',
+  title: 'Form/Select',
   component: Select,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   parameters: {
@@ -90,7 +90,7 @@ export const Example: Story = {
   args: {
     items: people
   },
-  render: (args)=>{
-    return <div style={{width: "300px"}}><Select {...args}/></div>
+  render: (args) => {
+    return <div style={{ width: "300px" }}><Select {...args} /></div>
   }
 };

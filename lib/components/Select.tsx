@@ -83,14 +83,14 @@ export const Select: FC<SelectProps> = ({
   }
 
   const listButton = () => (
-    <Listbox.Button className={`${error && 'ring-rose-800 focus:ring-rose-800'} relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm sm:leading-6`}>
+    <Listbox.Button className={`${error && 'bg-red-400 focus:ring-red-400'} relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-600 sm:text-sm sm:leading-6`}>
       <span className="flex items-center">
         {avatar &&
           <img onClick={(e) => onAvatarClick(list, e)} src={list?.avatar} alt="" className={`${onAvatarAction && "cursor-pointer"} ${list.id !== -1 ? 'h-5 w-5' : ""} flex-shrink-0 rounded-full`} />}
-        <span className={`${avatar ? "ml-3" : ""} block truncate ${error && 'text-rose-800'}`}>{list?.name}</span>
+        <span className={`${avatar ? "ml-3" : ""} block truncate ${error && 'text-red-400'}`}>{list?.name}</span>
       </span>
       <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-        <svg aria-hidden="true" className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
+        <svg aria-hidden="true" className="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
         </svg>
       </span>

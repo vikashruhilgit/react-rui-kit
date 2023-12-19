@@ -1,0 +1,45 @@
+button: 
+  primery bg-blue-600 hover:bg-blue-500 , 
+  secondry: bg-white hover:bg-gray-50 ring-gray-300 text-gray-900 
+
+Avatar: 
+  placeholder: svg: text-gray-300, background: bg-gray-100 || 
+  notification: 
+    primery: bg-blue-600, 
+    warn: bg-red-400, 
+    default: bg-gray-300,ring-white
+
+Navbar: 
+  bg-gray-800, items: bg-gray-900, 
+  profile menu item hover:bg-gray-700, active: bg-gray-100
+  profile menu button: bg-gray-800, focus:ring-white,
+  profile menu background: bg-white
+  nav item: active: active: (bg-gray-900 text-white), text-gray-300 hover:bg-gray-700 hover:text-white
+  hamburger icon: mobile style: text-gray-300, hover:text-white,  hover:bg-gray-700, focus:ring-white
+  notification icon: bg-gray-800, text-gray-400 hover:text-white, focus:ring-white
+  notofication flag: bg-red-400
+
+Select: 
+  text-gray-900
+  error: bg-red-400 focus:bg-red-400
+  bg-white, text-gray-900, ring-gray-300, focus:ring-blue-600
+  item: text-gray-900, 
+  selected item: bg-blue-600, text-white, icon: selected active: text-white else: text-blue-600 
+
+SlideOver:
+  close button: 
+    onslider : text-gray-500 hover:text-gray-700 focus:ring-gray-500
+    outside: text-gray-300 hover:text-white focus:ring-white
+
+Input: 
+  label: text-gray-900
+  input: ring-gray-300 placeholder:text-gray-500, focus:ring-blue-600
+  error: text-red-900 ring-red-400 placeholder:text-red-400 focus:ring-red-500 
+
+textarea:
+  text-gray-900
+  placeholder:text-gray-400 focus:ring-blue-600
+  
+Radio: 
+  text-gray-900
+  

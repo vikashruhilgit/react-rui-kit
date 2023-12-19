@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { SliderOver } from "../../lib/components/SliderOver";
+import { Avatar } from "../../lib/components/Avatar";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
-  title: 'Components/SliderOver',
-  component: SliderOver,
+  title: 'Components/Avatar',
+  component: Avatar,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
@@ -17,7 +17,7 @@ const meta = {
   /* argTypes: {
     backgroundColor: { control: 'color' },
   }, */
-} satisfies Meta<typeof SliderOver>;
+} satisfies Meta<typeof Avatar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -25,12 +25,10 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Example: Story = {
   args: {
-    open: false,
-    onClose: () => {
-      console.log('close')
-    },
+    link: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    round: true
   },
   render: (args) => {
-    return <SliderOver {...args} />
+    return <Avatar {...args} />
   }
 };

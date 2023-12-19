@@ -104,7 +104,7 @@ export const Table = () => {
             placeholder="Search all columns..."
           />
         </div>
-        <div className="p-2 inline-block border border-black shadow rounded">
+        {/* <div className="p-2 inline-block border border-black shadow rounded">
           <div className="px-1 border-b border-black">
             <label>
               <input
@@ -131,7 +131,7 @@ export const Table = () => {
               </div>
             )
           })}
-        </div>
+        </div> */}
         {/* <div className="p-2">
           <div>
             <input
@@ -156,14 +156,14 @@ export const Table = () => {
         {isSplit ? <CustomTable table={table} tableGroup="right" /> : null}
       </div>
       <div className="p-2" />
-      <ActionButtons
+      {/* <ActionButtons
         getSelectedRowModel={table.getSelectedRowModel}
         refreshData={refreshData}
         rerender={rerender}
         rowSelection={rowSelection}
       />
       <div className="p-2" />
-      <pre>{JSON.stringify(table.getState(), null, 2)}</pre>
+      <pre>{JSON.stringify(table.getState(), null, 2)}</pre> */}
     </>
   )
 }

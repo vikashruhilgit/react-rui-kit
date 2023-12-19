@@ -67,11 +67,11 @@ export const Button = ({
       break;
   }
   const radius = roundedFull ? "rounded-full" : "rounded-lg";
-  const background = primary ? "bg-blue-600 hover:bg-blue-500 text-white" : "ring-gray-300 ring-inset shadow-sm ring-1 text-gray-900 bg-white hover:bg-slate-100"
+  const background = primary ? "bg-blue-600 hover:bg-blue-500 text-white" : "ring-gray-300 ring-inset ring-1 text-gray-900 bg-white hover:bg-gray-100"
 
   return (
     <button
-      className={`${background} ${sizeClass} ${radius} text-center ${fullWidth ? "w-full" : ""} capitalize rounded-full font-medium cursor-pointer select-none`}
+      className={`${background} ${sizeClass} ${radius} text-center ${fullWidth ? "w-full" : ""} shadow-sm capitalize rounded-full font-medium cursor-pointer select-none`}
       {...props}
     >
       {label ? label : children}
