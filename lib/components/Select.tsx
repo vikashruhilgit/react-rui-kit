@@ -8,7 +8,7 @@ import { FC, Fragment, MouseEvent, useState } from "react";
 
 
 
-export interface SelectItems {
+export interface SelectItem {
   id: number;
   name: string;
   avatar?: string;
@@ -40,11 +40,11 @@ interface SelectProps {
   /**
     * Options for the select menu
     */
-  items: SelectItems[];
+  items: SelectItem[];
   /**
   * Action handler for the select menu
   */
-  onChange?: (SelectItems: SelectItems) => void;
+  onChange?: (SelectItem: SelectItem) => void;
   /**
   * error state for the select menu
   */
@@ -52,7 +52,7 @@ interface SelectProps {
   /**
   * avatar action for the select menu
   */
-  onAvatarAction?: (SelectItems: SelectItems) => void;
+  onAvatarAction?: (SelectItem: SelectItem) => void;
 }
 
 export const Select: FC<SelectProps> = ({
@@ -67,19 +67,19 @@ export const Select: FC<SelectProps> = ({
 }) => {
 
   const initialValue = items[selectedIndex];
-  const [list, setList] = useState<SelectItems>(initialValue || {
+  const [list, setList] = useState<SelectItem>(initialValue || {
     id: -1,
     name: placeholder,
   })
 
-  const changeHandler = (selectItems: SelectItems) => {
-    setList(selectItems)
-    onChange && onChange(selectItems);
+  const changeHandler = (SelectItem: SelectItem) => {
+    setList(SelectItem)
+    onChange && onChange(SelectItem);
   }
 
-  const onAvatarClick = (selectItems: SelectItems, e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>) => {
+  const onAvatarClick = (SelectItem: SelectItem, e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>) => {
     e.stopPropagation()
-    onAvatarAction && onAvatarAction(selectItems)
+    onAvatarAction && onAvatarAction(SelectItem)
   }
 
   const listButton = () => (
@@ -101,7 +101,7 @@ export const Select: FC<SelectProps> = ({
     active
   }: SelectState) => `${active ? 'bg-blue-600 text-white' : 'text-gray-900'} relative cursor-default select-none py-2 pl-3 pr-9`
 
-  const renderItems = (person: SelectItems) =>
+  const renderItems = (person: SelectItem) =>
     ({ selected, active }: SelectState) =>
     (
       <>

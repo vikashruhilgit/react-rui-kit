@@ -74,7 +74,7 @@ export const Button = ({
       className={`${background} ${sizeClass} ${radius} text-center ${fullWidth ? "w-full" : ""} shadow-sm capitalize rounded-full font-medium cursor-pointer select-none`}
       {...props}
     >
-      {label ? label : children}
+      {children ? children : label}
     </button>
   );
 };

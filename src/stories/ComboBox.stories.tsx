@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Select, SelectItem } from "../../lib/components/Select";
+import { ComboBox, ComboBoxItem } from "../../lib/components/ComboBox";
 
-const people: SelectItem[] = [
+const people: ComboBoxItem[] = [
   {
     id: 1,
     name: 'Wade Cooper',
@@ -67,8 +67,8 @@ const people: SelectItem[] = [
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
-  title: 'Form/Select',
-  component: Select,
+  title: 'Form/ComboBox',
+  component: ComboBox,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
@@ -80,7 +80,7 @@ const meta = {
   /* argTypes: {
     backgroundColor: { control: 'color' },
   }, */
-} satisfies Meta<typeof Select>;
+} satisfies Meta<typeof ComboBox>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -91,6 +91,6 @@ export const Example: Story = {
     items: people
   },
   render: (args) => {
-    return <div style={{ width: "300px" }}><Select {...args} /></div>
+    return <div style={{ width: "300px" }}><ComboBox {...args} /></div>
   }
 };
