@@ -1,8 +1,7 @@
+import { FC, Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 
 import "../main.css";
-
-import { FC, Fragment, useState } from "react";
 
 export interface ComboBoxItem {
   id: number;
@@ -58,11 +57,19 @@ export const ComboBox: FC<ComboBoxProps> = ({
 }) => {
 
   const initialValue = items[selectedIndex];
+
   const [query, setQuery] = useState('')
   const [list, setList] = useState<ComboBoxItem>(initialValue || {
     id: -1,
     name: placeholder,
   })
+
+  if (initialValue === undefined && list.id != -1) {
+    setList({
+      id: -1,
+      name: placeholder,
+    })
+  }
 
   const changeHandler = (selectItems: ComboBoxItem) => {
     setList(selectItems)

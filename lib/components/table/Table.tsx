@@ -1,5 +1,6 @@
-import { faker } from "@faker-js/faker";
+import { useEffect, useReducer, useState } from "react"
 import {
+  ColumnDef,
   ColumnFiltersState,
   getCoreRowModel,
   getFacetedMinMaxValues,
@@ -12,22 +13,34 @@ import {
   GroupingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { useEffect, useReducer, useState } from "react"
-import ActionButtons from "./component/ActionButtons";
+
 import CustomTable from "./component/CustomTable";
-import DebouncedInput from "./component/DebouncedInput";
+import { TableAction } from "./component/TableAction";
+import ActionButtons from "./component/ActionButtons";
+
+import { getTableMeta } from "./util/tableModels";
+
 import { useSkipper } from "./hook/useSkipper";
-import { makeData } from "./util/makeData";
-import { fuzzyFilter, getTableMeta, columns } from "./util/tableModels";
 
 import "../../main.css";
 
+interface TableProps<T> {
+  data: T[];
+  columns: ColumnDef<T>[];
+}
 
-export const Table = () => {
+
+export const Table = <T,>({
+  columns,
+  data,
+}: TableProps<T>) => {
+
   const rerender = useReducer(() => ({}), {})[1]
 
-  const [data, setData] = useState(makeData(1000))
-  const refreshData = () => setData(makeData(1000))
+  // const [data, setData] = useState(makeData(1000));
+  // const refreshData = () => setTableData(makeData(1000));
+  const [tableData, setTableData] = useState(data);
+  const refreshData = () => setTableData(data);
 
   const [columnVisibility, setColumnVisibility] = useState({});
   const [grouping, setGrouping] = useState<GroupingState>([]);
@@ -39,11 +52,18 @@ export const Table = () => {
     []
   )
 
-  const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper()
+  const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
+  /*   const defaultColumn = (): Partial<ColumnDef<T, unknown>> => {
+      return {
+        filterFn: getFilterFn<T>(),
+      }
+    } */
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
+    // defaultColumn: defaultColumn(),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -54,7 +74,7 @@ export const Table = () => {
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: fuzzyFilter,
+    globalFilterFn: "auto",
     autoResetPageIndex,
     enableColumnResizing: true,
     columnResizeMode: 'onChange',
@@ -63,7 +83,7 @@ export const Table = () => {
     onColumnPinningChange: setColumnPinning,
     onRowSelectionChange: setRowSelection,
     // Provide our updateData function to our table meta
-    meta: getTableMeta(setData, skipAutoResetPageIndex),
+    meta: getTableMeta<T>(setTableData, skipAutoResetPageIndex),
     state: {
       grouping,
       columnFilters,
@@ -81,72 +101,15 @@ export const Table = () => {
     if (table.getState().columnFilters[0]?.id === 'fullName') {
       if (table.getState().sorting[0]?.id !== 'fullName') {
         table.setSorting([{ id: 'fullName', desc: false }])
+        table.setColumnFilters
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table.getState().columnFilters[0]?.id])
 
-  const randomizeColumns = () => {
-    table.setColumnOrder(
-      faker.helpers.shuffle(table.getAllLeafColumns().map(d => d.id))
-    )
-  }
-
   return (
     <>
-      <div className="p-2 grid grid-cols-4 gap-4">
-        <div className="p-2">
-          Search:
-          <DebouncedInput
-            value={globalFilter ?? ''}
-            onChange={value => setGlobalFilter(String(value))}
-            className="mx-1 p-2 font-lg shadow border border-block"
-            placeholder="Search all columns..."
-          />
-        </div>
-        {/* <div className="p-2 inline-block border border-black shadow rounded">
-          <div className="px-1 border-b border-black">
-            <label>
-              <input
-                type="checkbox"
-                checked={table.getIsAllColumnsVisible()}
-                onChange={table.getToggleAllColumnsVisibilityHandler()}
-                className="mr-1"
-              />
-              Toggle All
-            </label>
-          </div>
-          {table.getAllLeafColumns().map(column => {
-            return (
-              <div key={column.id} className="px-1">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={column.getIsVisible()}
-                    onChange={column.getToggleVisibilityHandler()}
-                    className="mr-1"
-                  />
-                  {column.id}
-                </label>
-              </div>
-            )
-          })}
-        </div> */}
-        {/* <div className="p-2">
-          <div>
-            <input
-              type="checkbox"
-              checked={isSplit}
-              onChange={e => setIsSplit(e.target.checked)}
-              className="mx-1"
-            />
-            Split Mode
-          </div>
-          <button onClick={randomizeColumns} className="border rounded p-1">
-            Shuffle Columns
-          </button>
-        </div> */}
-      </div>
+      <TableAction table={table} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
       <div className={`flex justify-center ${isSplit ? 'gap-4' : ''}`}>
         {isSplit ? <CustomTable table={table} tableGroup="left" /> : null}
         <CustomTable
@@ -156,14 +119,14 @@ export const Table = () => {
         {isSplit ? <CustomTable table={table} tableGroup="right" /> : null}
       </div>
       <div className="p-2" />
-      {/* <ActionButtons
+      <ActionButtons
         getSelectedRowModel={table.getSelectedRowModel}
         refreshData={refreshData}
         rerender={rerender}
         rowSelection={rowSelection}
       />
       <div className="p-2" />
-      <pre>{JSON.stringify(table.getState(), null, 2)}</pre> */}
+      <pre>{JSON.stringify(table.getState(), null, 2)}</pre>
     </>
   )
 }

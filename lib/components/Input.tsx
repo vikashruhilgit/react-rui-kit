@@ -7,6 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   leadingIcon?: boolean;
   trailingIcon?: boolean;
   label: string;
+  showOptional?: boolean
 }
 
 export const Input: FC<InputProps> = ({
@@ -21,6 +22,7 @@ export const Input: FC<InputProps> = ({
   placeholder,
   type,
   label,
+  showOptional,
   ...props
 }) => {
   const labelId = label.toLowerCase().replace(" ", "")
@@ -30,7 +32,7 @@ export const Input: FC<InputProps> = ({
         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
           {label}
         </label>
-        {!required && <span className="text-xs leading-6 text-gray-500" id="email-optional">
+        {!required && showOptional && <span className="text-xs leading-6 text-gray-500" id="email-optional">
           Optional
         </span>}
       </div>

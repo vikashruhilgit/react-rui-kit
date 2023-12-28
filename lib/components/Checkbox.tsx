@@ -18,6 +18,7 @@ interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   rowView?: boolean
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined
   onClick?: React.MouseEventHandler<HTMLInputElement> | undefined
+  dense?: boolean
 }
 
 export const Checkbox: FC<CheckboxProps> = ({
@@ -27,6 +28,7 @@ export const Checkbox: FC<CheckboxProps> = ({
   items,
   onChange,
   onClick,
+  dense,
   ...props
 }) => {
   return (
@@ -35,8 +37,8 @@ export const Checkbox: FC<CheckboxProps> = ({
       {subHeading && <p className="text-sm text-gray-500">{subHeading}</p>}
       <fieldset>
         {heading && <legend className="sr-only">{heading}</legend>}
-        <div className={`space-y-5 my-2 ${rowView && "sm:flex sm:items-center sm:space-x-10 sm:space-y-0"}`}>
-          {items.map(item => <div className="relative flex items-start">
+        <div className={`${dense ? "" : "space-y-5 my-2"}  ${rowView && "sm:flex sm:items-center sm:space-x-10 sm:space-y-0"}`}>
+          {items.map((item, i) => <div key={i} className="relative flex items-start">
             <div className="flex h-6 items-center">
               <input
                 id={item.id}
@@ -46,13 +48,13 @@ export const Checkbox: FC<CheckboxProps> = ({
                 className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600 cursor-pointer"
                 onChange={onChange}
                 onClick={onClick}
-                data-item={item}
+                data-item={JSON.stringify(item)}
                 checked={item.isChecked}
                 {...props}
               />
             </div>
             <div className="ml-3 text-sm leading-6">
-              <label htmlFor={item.id} className="font-medium text-gray-900 cursor-pointer">
+              <label htmlFor={item.id} className="font-medium text-gray-900 cursor-pointer whitespace-nowrap">
                 {item.label}
               </label>
               {item.description &&

@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
-import { Table } from "../../lib/components/table/Table";
+import { Table } from '../../lib/components/table/Table';
+import { Person, columns, makeData } from './tableData';
+import { addIndeterminateCheckbox } from '../../lib/components/table/util/util';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
   title: 'Components/Table',
-  component: Table,
+  component: Table<Person>,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
@@ -17,7 +18,7 @@ const meta = {
   /* argTypes: {
     backgroundColor: { control: 'color' },
   }, */
-} satisfies Meta<typeof Table>;
+} satisfies Meta<typeof Table<Person>>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -25,8 +26,10 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Example: Story = {
   args: {
+    columns: addIndeterminateCheckbox(columns),
+    data: makeData(1000),
   },
   render: (args) => {
-    return <div><Table {...args} /></div>
+    return <Table<Person> {...args} />
   }
 };

@@ -2,6 +2,7 @@
 import { Column, RowData, Table } from '@tanstack/react-table'
 import React from 'react'
 import DebouncedInput from './DebouncedInput'
+import { ComboBox } from '../../ComboBox'
 
 type NumberInputProps = {
   columnFilterValue: [number, number]
@@ -21,7 +22,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   const max = Number(maxOpt)
 
   return (
-    <div>
+    <div className='text-left p-2'>
       <div className="flex space-x-2">
         <DebouncedInput
           type="number"
@@ -32,7 +33,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
             setFilterValue((old: [number, number]) => [value, old?.[1]])
           }
           placeholder={`Min ${minOpt ? `(${min})` : ''}`}
-          className="w-24 border shadow rounded"
+          className="shadow-sm border-gray-300 rounded-md text-xs p-1.5 flex-1"
         />
         <DebouncedInput
           type="number"
@@ -43,7 +44,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
             setFilterValue((old: [number, number]) => [old?.[0], value])
           }
           placeholder={`Max ${maxOpt ? `(${max})` : ''}`}
-          className="w-24 border shadow rounded"
+          className="shadow-sm border-gray-300 rounded-md text-xs p-1.5 flex-1"
         />
       </div>
       <div className="h-1" />
@@ -60,17 +61,16 @@ type TextInputProps = {
 }
 
 const TextInput: React.FC<TextInputProps> = ({
-  columnId,
   columnFilterValue,
   columnSize,
   setFilterValue,
   sortedUniqueValues,
 }) => {
-  const dataListId = columnId + 'list'
+  // const dataListId = columnId + 'list'
 
   return (
-    <React.Fragment>
-      <datalist id={dataListId}>
+    <div className='text-left w-full p-2'>
+      {/* <datalist id={dataListId}>
         {sortedUniqueValues.slice(0, 5000).map((value: any) => (
           <option value={value} key={value} />
         ))}
@@ -78,13 +78,23 @@ const TextInput: React.FC<TextInputProps> = ({
       <DebouncedInput
         type="text"
         value={columnFilterValue ?? ''}
-        onChange={value => setFilterValue(value)}
+        onChange={value => {
+          console.log(value);
+          setFilterValue(value)
+        }}
         placeholder={`Search... (${columnSize})`}
-        className="w-36 border shadow rounded"
+        // className="w-36 border shadow rounded"
+        className="shadow-sm border-gray-300 rounded-md text-xs w-full p-1.5"
         list={dataListId}
+      /> */}
+      <ComboBox
+        selectedIndex={sortedUniqueValues.indexOf(columnFilterValue)}
+        placeholder={`Search... (${columnSize})`}
+        items={sortedUniqueValues.map(single => ({ id: single, name: single }))}
+        onChange={value => setFilterValue(value.id)}
       />
       <div className="h-1" />
-    </React.Fragment>
+    </div>
   )
 }
 
@@ -93,13 +103,12 @@ type Props<T extends RowData> = {
   table: Table<T>
 }
 
-export function Filter<T extends RowData>({ column, table }: Props<T>) {
+export function QuickFilters<T extends RowData>({ column, table }: Props<T>) {
   const firstValue = table
     .getPreFilteredRowModel()
     .flatRows[0]?.getValue(column.id)
-
-  const columnFilterValue = column.getFilterValue()
-  const uniqueValues = column.getFacetedUniqueValues()
+  const columnFilterValue = column.getFilterValue();
+  const uniqueValues = column.getFacetedUniqueValues();
 
   const sortedUniqueValues = React.useMemo(
     () =>
@@ -126,5 +135,3 @@ export function Filter<T extends RowData>({ column, table }: Props<T>) {
     />
   )
 }
-
-export default Filter

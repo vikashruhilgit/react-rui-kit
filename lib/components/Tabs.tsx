@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useState } from "react";
+import { FC, MouseEvent } from "react";
 import * as Icons from '@heroicons/react/20/solid';
 
 import "../main.css";
@@ -24,16 +24,16 @@ export interface TabsProps {
   type?: keyof typeof TabType
   fullWidth?: boolean;
   justifyCenter?: boolean
+  onChange?: (item: TabItem) => void
 }
 
 export const Tabs: FC<TabsProps> = ({
   tabs,
   type = "default",
   fullWidth,
-  justifyCenter
+  justifyCenter,
+  onChange
 }) => {
-  const [items, setItems] = useState(tabs);
-
   const renderIcon = (tab: TabItem) => {
     /* Hack to fix type issue for icons */
     const icon = tab.icon as "AcademicCapIcon";
@@ -50,11 +50,7 @@ export const Tabs: FC<TabsProps> = ({
 
   const clickHandler = (e: MouseEvent<HTMLAnchorElement>, item: TabItem) => {
     e.preventDefault();
-    const updatedList = items.map(single => ({
-      ...single,
-      current: single.name === item.name ? true : false
-    }));
-    setItems(updatedList);
+    onChange && onChange(item)
   }
 
   const generateClasses = (item: TabItem, index: number) => {
@@ -98,12 +94,12 @@ export const Tabs: FC<TabsProps> = ({
       </div>
       <div className="hidden sm:block">
         <div className={`${type === TabType.default ? "border-b border-gray-200" : ""}`}>
-          <nav className={`flex ${type === TabType.Pills && "space-x-4"} ${type === TabType.default && "-mb-px space-x-8"} ${type === TabType.Bar && "isolate divide-x divide-gray-200 rounded-lg shadow"} `} aria-label="Tabs">
-            {items.map((item, idx) => (
+          <nav className={`flex cursor-pointer ${type === TabType.Pills && "space-x-4"} ${type === TabType.default && "-mb-px"} ${type === TabType.Bar && "isolate divide-x divide-gray-200 rounded-lg shadow"} `} aria-label="Tabs">
+            {tabs.map((item, idx) => (
               <a
                 key={item.name}
                 href={item.href}
-                className={`${generateClasses(item, idx)}  ${fullWidth && "w-1/4"} ${justifyCenter && "justify-center"}`}
+                className={`${generateClasses(item, idx)}  ${fullWidth && "flex-1"} ${justifyCenter && "justify-center "}`}
                 aria-current={item.current ? 'page' : undefined}
                 onClick={(e) => clickHandler(e, item)}
               >

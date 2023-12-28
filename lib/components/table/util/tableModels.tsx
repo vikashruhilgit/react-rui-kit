@@ -1,16 +1,10 @@
-import {
-  rankItem,
-  compareItems,
-  RankingInfo,
-} from '@tanstack/match-sorter-utils'
-import {
-  ColumnDef,
-  FilterFn,
-  SortingFn,
-  sortingFns,
-} from '@tanstack/react-table'
+import { FilterFn, SortingFn, sortingFns } from '@tanstack/react-table'
 import { Person } from './makeData'
-import IndeterminateCheckbox from '../component/InderterminateCheckbox'
+import { RankingInfo, compareItems, rankItem } from '@tanstack/match-sorter-utils'
+
+export type TableMeta = {
+  updateData: (rowIndex: number, columnId: string, value: unknown) => void
+}
 
 export const fuzzyFilter: FilterFn<Person> = (
   row,
@@ -19,7 +13,7 @@ export const fuzzyFilter: FilterFn<Person> = (
   addMeta
 ) => {
   // Rank the item
-  const itemRank = rankItem(row.getValue(columnId), value)
+  const itemRank = rankItem(row.getValue(columnId), value);
 
   // Store the ranking info
   addMeta(itemRank)
@@ -41,10 +35,6 @@ export const fuzzySort: SortingFn<Person> = (rowA, rowB, columnId) => {
 
   // Provide an alphanumeric fallback for when the item ranks are equal
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir
-}
-
-export type TableMeta = {
-  updateData: (rowIndex: number, columnId: string, value: unknown) => void
 }
 
 /* // Give our default column cell renderer editing superpowers!
@@ -74,89 +64,8 @@ export const defaultColumn: Partial<ColumnDef<Person>> = {
   },
 } */
 
-export const columns: ColumnDef<Person>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <IndeterminateCheckbox
-        checked={table.getIsAllRowsSelected()}
-        indeterminate={table.getIsSomeRowsSelected()}
-        onChange={table.getToggleAllRowsSelectedHandler()}
-      />
-    ),
-    cell: ({ row }) => (
-      <div>
-        <IndeterminateCheckbox
-          checked={row.getIsSelected()}
-          indeterminate={row.getIsSomeSelected()}
-          onChange={row.getToggleSelectedHandler()}
-        />
-      </div>
-    ),
-  },
-  {
-    header: 'Name',
-    footer: props => props.column.id,
-    columns: [
-      {
-        accessorKey: 'firstName',
-        id: 'firstName',
-        cell: info => info.getValue(),
-        footer: props => props.column.id,
-      },
-      {
-        accessorFn: row => row.lastName,
-        id: 'lastName',
-        cell: info => info.getValue(),
-        header: () => <span>Last Name</span>,
-        footer: props => props.column.id,
-      },
-      {
-        accessorFn: row => `${row.firstName} ${row.lastName}`,
-        id: 'fullName',
-        header: 'Full Name',
-        cell: info => info.getValue(),
-        footer: props => props.column.id,
-        filterFn: fuzzyFilter,
-        sortingFn: fuzzySort,
-      },
-    ],
-  },
-  {
-    header: 'Info',
-    footer: props => props.column.id,
-    columns: [
-      {
-        accessorKey: 'age',
-        header: () => 'Age',
-        footer: props => props.column.id,
-      },
-      {
-        header: 'More Info',
-        columns: [
-          {
-            accessorKey: 'visits',
-            header: () => <span>Visits</span>,
-            footer: props => props.column.id,
-          },
-          {
-            accessorKey: 'status',
-            header: 'Status',
-            footer: props => props.column.id,
-          },
-          {
-            accessorKey: 'progress',
-            header: 'Profile Progress',
-            footer: props => props.column.id,
-          },
-        ],
-      },
-    ],
-  },
-]
-
-export const getTableMeta = (
-  setData: React.Dispatch<React.SetStateAction<Person[]>>,
+export const getTableMeta = <T,>(
+  setData: React.Dispatch<React.SetStateAction<T[]>>,
   skipAutoResetPageIndex: () => void
 ) =>
 ({
