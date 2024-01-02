@@ -1,40 +1,27 @@
-import { ChangeEvent, FC, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ChangeEvent, useState } from "react";
 
 import { Input } from "../../Input"
-
 import { Checkbox } from "../../Checkbox";
 
-export interface MultiSearchItem {
+export interface MultiTextSearchItem {
   id: string;
   label: string;
   avatar?: string;
-  isChecked?: boolean
+  isChecked?: boolean;
 }
 
-interface MultiSearchProps {
-  /**
-  * placeholder for the list default - Select
-  */
-  placeholder?: string;
-  /**
-  * label for the list default
-  */
-  label?: string;
-  /**
-    * Options for the select menu
-    */
-  items: MultiSearchItem[];
-  /**
-  * Action handler for the select menu
-  */
-  onChange?: (SelectItems: MultiSearchItem) => void;
+interface MultiTextSearchProps<T> {
+  items: MultiTextSearchItem[];
+  onChange: (SelectItems: T) => void;
+  placeholder: string;
 }
 
-export const MultiSearch: FC<MultiSearchProps> = ({
-  placeholder,
+export const MultiTextSearch = <T,>({
   items,
   onChange,
-}) => {
+  placeholder
+}: MultiTextSearchProps<T>) => {
 
   const [query, setQuery] = useState('');
 
@@ -50,14 +37,12 @@ export const MultiSearch: FC<MultiSearchProps> = ({
       })
 
   const checkboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedItem: MultiSearchItem = JSON.parse(e.target.dataset.item!)
-    onChange && onChange({
+    const selectedItem: T = JSON.parse(e.target.dataset.item!)
+    onChange({
       ...selectedItem,
       isChecked: e.target.checked
     })
   }
-
-  console.log(filteredItem);
 
   return <section className="p-2">
     <Input label="" placeholder={placeholder} onChange={(e) => changeHandler(e.target.value)} />

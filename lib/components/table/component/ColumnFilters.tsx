@@ -2,12 +2,10 @@
 import React, { useState } from 'react'
 import { Header, RowData, Table } from '@tanstack/react-table'
 
-// import { ChevronRightIcon } from '@heroicons/react/20/solid'
-
-import { MultiSearch, MultiSearchItem } from './MultiSearch'
+import { MultiTextFilter } from './MultiTextFilter'
 import { TabItem, Tabs } from '../../Tabs'
-import { QuickFilters } from './QuickFilters'
-
+import { QuickFilter } from './QuickFilter'
+import { ConditionalFilter } from './ConditionalFilter'
 
 type Props<T extends RowData> = {
   header: Header<T, unknown>
@@ -21,6 +19,10 @@ const tabsData = [{
 {
   name: "Multi",
   current: false
+},
+{
+  name: "Condition",
+  current: false
 }]
 
 export function ColumnFilters<T extends RowData>({ header, table }: Props<T>) {
@@ -29,14 +31,12 @@ export function ColumnFilters<T extends RowData>({ header, table }: Props<T>) {
   const firstValue = table
     .getPreFilteredRowModel()
     .flatRows[0]?.getValue(header.column.id)
-  const columnFilterValue = header.column.getFilterValue();
+
   const uniqueValues = header.column.getFacetedUniqueValues();
 
   const sortedUniqueValues = React.useMemo(
     () =>
-      typeof firstValue === 'number'
-        ? []
-        : Array.from(uniqueValues.keys()).sort(),
+      Array.from(uniqueValues.keys()).sort(),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [uniqueValues]
   )
@@ -49,45 +49,46 @@ export function ColumnFilters<T extends RowData>({ header, table }: Props<T>) {
     setTabs(updatedList);
   }
 
-  // const isNumber = typeof firstValue === 'number' ? true : false
+  const isNumber = typeof firstValue === 'number' ? true : false
 
-  const handleSelection = (item: MultiSearchItem) => {
-    // console.log(item);
-    // console.log(columnFilterValue);
-    header.column.columnDef.filterFn = "arrIncludesSome";
-    let existingFilter = columnFilterValue as string[] || [];
 
-    if (item.isChecked) {
-      header.column.setFilterValue([...existingFilter as string[], item.label]);
-    } else {
-      existingFilter = existingFilter.filter((single: string) => single !== item.label);
-      header.column.setFilterValue([...existingFilter]);
-    }
-  }
-  console.log(columnFilterValue);
-  return <>
-    <Tabs tabs={tabs}
-      fullWidth={true}
-      onChange={tabHandler}
-    />
-    <section>
-      {tabs.map((single, i) => single.current ?
-        <section key={i}>
+
+  const typeTabs = isNumber ? tabs.filter(single => single.name !== "Multi") : tabs
+
+  const renderTabs = () => {
+    return <>
+      {typeTabs.map((single, i) => single.current ?
+        <section className='' key={i}>
           {single.name === "Quick" &&
-            <QuickFilters column={header.column} table={table} />}
+            <QuickFilter
+              column={header.column}
+              table={table}
+              sortedUniqueValues={sortedUniqueValues}
+            />}
           {single.name === "Multi" &&
-            <MultiSearch
-              placeholder={`Search (${sortedUniqueValues.length})`}
-              items={sortedUniqueValues.map(value => ({
-                id: value,
-                label: value,
-                isChecked: (columnFilterValue && (columnFilterValue as string[]).includes(value)) ? true : false
-              }))}
-              onChange={handleSelection}
+            <MultiTextFilter<T>
+              column={header.column}
+              table={table}
+              sortedUniqueValues={sortedUniqueValues}
+            />}
+          {single.name === "Condition" &&
+            <ConditionalFilter<T>
+              column={header.column}
+              table={table}
+              sortedUniqueValues={sortedUniqueValues}
             />}
         </section>
         : null)}
-    </section>
+    </>
+  }
+
+  return <>
+    <Tabs tabs={typeTabs}
+      fullWidth={true}
+      onChange={tabHandler}
+      justifyCenter={true}
+    />
+    {renderTabs()}
     {/* <section className='flex justify-between items-center hover:bg-gray-50'>
       <p className='p-2'>{isNumber ? "Number" : "Text"} Filter</p>
       <ChevronRightIcon

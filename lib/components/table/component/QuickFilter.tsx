@@ -23,7 +23,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 
   return (
     <div className='text-left p-2'>
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 justify-stretch">
         <DebouncedInput
           type="number"
           min={min}
@@ -101,23 +101,15 @@ const TextInput: React.FC<TextInputProps> = ({
 type Props<T extends RowData> = {
   column: Column<T, unknown>
   table: Table<T>
+  sortedUniqueValues: any[]
 }
 
-export function QuickFilters<T extends RowData>({ column, table }: Props<T>) {
+export function QuickFilter<T extends RowData>({ column, table, sortedUniqueValues }: Props<T>) {
   const firstValue = table
     .getPreFilteredRowModel()
     .flatRows[0]?.getValue(column.id)
   const columnFilterValue = column.getFilterValue();
   const uniqueValues = column.getFacetedUniqueValues();
-
-  const sortedUniqueValues = React.useMemo(
-    () =>
-      typeof firstValue === 'number'
-        ? []
-        : Array.from(uniqueValues.keys()).sort(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [uniqueValues]
-  )
 
   return typeof firstValue === 'number' ? (
     <NumberInput

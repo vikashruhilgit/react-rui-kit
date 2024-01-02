@@ -27,7 +27,7 @@ export const Input: FC<InputProps> = ({
 }) => {
   const labelId = label.toLowerCase().replace(" ", "")
   return (
-    <div>
+    <section>
       <div className="flex justify-between">
         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
           {label}
@@ -70,6 +70,6 @@ export const Input: FC<InputProps> = ({
       <p className={`text-xs mt-2 ${error ? "text-red-400" : "text-gray-500"}`} id="helper-description">
         {(helperText || error) ? helperText : " "}
       </p>
-    </div>
+    </section>
   )
 }

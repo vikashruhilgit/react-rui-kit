@@ -83,7 +83,6 @@ export function Pagination({
         <Select
           selectedIndex={[10, 20, 30, 40, 50].indexOf(pageSize)}
           onChange={e => {
-            console.log(e);
             setPageSize(Number(e.name))
           }}
           items={[10, 20, 30, 40, 50].map((item, i) => ({

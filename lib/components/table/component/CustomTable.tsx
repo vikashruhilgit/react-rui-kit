@@ -71,38 +71,33 @@ export function CustomTable<T extends RowData>({
   }
 
   const renderFiltersPopover = (header: Header<T, unknown>) => {
+
     return <>
       {header.column.getCanFilter() ? (
         <Popover className="relative inline">
-          {() => (
-            <>
-              <Popover.Button
-                className={`inline-flex border-none p-1 focus-visible:outline-none`}
-              >
-                <FunnelIcon className='ml-2 h-4 w-4' />
-              </Popover.Button>
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-200"
-                enterFrom="opacity-0 translate-y-1"
-                enterTo="opacity-100 translate-y-0"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 translate-y-0"
-                leaveTo="opacity-0 translate-y-1"
-              >
-                <Popover.Panel className="absolute left-1/2 z-10 mt-1 max-w-12 min-w-[250px] -translate-x-1/2 transform px-4">
-                  <section className='bg-gray-100 shadow-sm rounded border border-gray-200'>
-                    <ColumnFilters<T> header={header} table={table} />
-                    <section className=''>
-                      <p className='p-2 text-right'>
-                        <Button primary={false} onClick={() => header.column.setFilterValue("")}>Reset</Button>
-                      </p>
-                    </section>
-                  </section>
-                </Popover.Panel>
-              </Transition>
-            </>
-          )}
+          <Popover.Button
+            className={`inline-flex border-none p-1 focus-visible:outline-none`}
+          >
+            <FunnelIcon className='ml-2 h-4 w-4' />
+          </Popover.Button>
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-200"
+            enterFrom="opacity-0 translate-y-1"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition ease-in duration-150"
+            leaveFrom="opacity-100 translate-y-0"
+            leaveTo="opacity-0 translate-y-1"
+          >
+            <Popover.Panel className="absolute left-1/2 z-10 mt-1 max-w-12 min-w-[300px] -translate-x-1/2 transform px-4">
+              <section className='bg-gray-100 shadow-sm rounded border border-gray-200'>
+                <ColumnFilters<T> header={header} table={table} />
+                <p className='p-2 text-right'>
+                  <Button primary={false} onClick={() => header.column.setFilterValue("")}>Reset</Button>
+                </p>
+              </section>
+            </Popover.Panel>
+          </Transition>
         </Popover>
       ) : null
       }
