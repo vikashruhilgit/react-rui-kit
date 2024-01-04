@@ -50,9 +50,6 @@ export function ColumnFilters<T extends RowData>({ header, table }: Props<T>) {
   }
 
   const isNumber = typeof firstValue === 'number' ? true : false
-
-
-
   const typeTabs = isNumber ? tabs.filter(single => single.name !== "Multi") : tabs
 
   const renderTabs = () => {
@@ -75,7 +72,6 @@ export function ColumnFilters<T extends RowData>({ header, table }: Props<T>) {
             <ConditionalFilter<T>
               column={header.column}
               table={table}
-              sortedUniqueValues={sortedUniqueValues}
             />}
         </section>
         : null)}

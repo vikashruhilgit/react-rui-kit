@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Column, RowData, Table } from '@tanstack/react-table'
 import React from 'react'
-import DebouncedInput from './DebouncedInput'
-import { ComboBox } from '../../ComboBox'
+import { Column, RowData, Table } from '@tanstack/react-table'
+
+import { DebouncedInput } from './DebouncedInput'
+import { ComboBox, ComboBoxItem } from '../../ComboBox'
 
 type NumberInputProps = {
   columnFilterValue: [number, number]
@@ -23,7 +24,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 
   return (
     <div className='text-left p-2'>
-      <div className="flex space-x-2 justify-stretch">
+      <div className="flex space-x-2">
         <DebouncedInput
           type="number"
           min={min}
@@ -33,7 +34,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
             setFilterValue((old: [number, number]) => [value, old?.[1]])
           }
           placeholder={`Min ${minOpt ? `(${min})` : ''}`}
-          className="shadow-sm border-gray-300 rounded-md text-xs p-1.5 flex-1"
         />
         <DebouncedInput
           type="number"
@@ -44,7 +44,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
             setFilterValue((old: [number, number]) => [old?.[0], value])
           }
           placeholder={`Max ${maxOpt ? `(${max})` : ''}`}
-          className="shadow-sm border-gray-300 rounded-md text-xs p-1.5 flex-1"
         />
       </div>
       <div className="h-1" />
@@ -52,46 +51,33 @@ const NumberInput: React.FC<NumberInputProps> = ({
   )
 }
 
-type TextInputProps = {
-  columnId: string
-  columnFilterValue: string
+type TextInputProps<T> = {
+  column: Column<T, unknown>
   columnSize: number
-  setFilterValue: (updater: any) => void
+  columnFilterValue: string
   sortedUniqueValues: any[]
 }
 
-const TextInput: React.FC<TextInputProps> = ({
+const TextInput = <T,>({
+  column,
   columnFilterValue,
   columnSize,
-  setFilterValue,
   sortedUniqueValues,
-}) => {
+}: TextInputProps<T>) => {
   // const dataListId = columnId + 'list'
+
+  const changeHandler = (val: ComboBoxItem) => {
+    column.columnDef.filterFn = "includesString"
+    column.setFilterValue(val.id)
+  }
 
   return (
     <div className='text-left w-full p-2'>
-      {/* <datalist id={dataListId}>
-        {sortedUniqueValues.slice(0, 5000).map((value: any) => (
-          <option value={value} key={value} />
-        ))}
-      </datalist>
-      <DebouncedInput
-        type="text"
-        value={columnFilterValue ?? ''}
-        onChange={value => {
-          console.log(value);
-          setFilterValue(value)
-        }}
-        placeholder={`Search... (${columnSize})`}
-        // className="w-36 border shadow rounded"
-        className="shadow-sm border-gray-300 rounded-md text-xs w-full p-1.5"
-        list={dataListId}
-      /> */}
       <ComboBox
         selectedIndex={sortedUniqueValues.indexOf(columnFilterValue)}
         placeholder={`Search... (${columnSize})`}
         items={sortedUniqueValues.map(single => ({ id: single, name: single }))}
-        onChange={value => setFilterValue(value.id)}
+        onChange={changeHandler}
       />
       <div className="h-1" />
     </div>
@@ -118,11 +104,10 @@ export function QuickFilter<T extends RowData>({ column, table, sortedUniqueValu
       setFilterValue={column.setFilterValue}
     />
   ) : (
-    <TextInput
-      columnId={column.id}
+    <TextInput<T>
+      column={column}
       columnFilterValue={columnFilterValue as string}
       columnSize={uniqueValues.size}
-      setFilterValue={column.setFilterValue}
       sortedUniqueValues={sortedUniqueValues}
     />
   )

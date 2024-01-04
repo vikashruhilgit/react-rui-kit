@@ -1,6 +1,7 @@
 import { ColumnDef, FilterFn, SortingFn, sortingFns } from "@tanstack/react-table";
 import IndeterminateCheckbox from "../component/InderterminateCheckbox";
 import { RankingInfo, compareItems, rankItem } from "@tanstack/match-sorter-utils";
+import { FilterValueType } from "../component/ConditionalFilter";
 
 export const addIndeterminateCheckbox = <T,>(columns: ColumnDef<T>[], label: string = "select") => {
   return [
@@ -41,6 +42,63 @@ export const shuffle = <T,>(array: T[]) => {
   return array;
 }
 
+export const getConditionalFilterFn = <T,>(): FilterFn<T> => {
+  return (
+    row,
+    columnId,
+    value,
+    // addMeta
+  ) => {
+    const { type, val } = value as FilterValueType;
+    const search = new RegExp(val, "i");
+    let result = false
+    const columnVal = (row.getValue(columnId) as string);
+
+    switch (type) {
+      case "Contains":
+        result = columnVal.search(search) >= 0 ? true : false;
+        break;
+      case "Does not contain":
+        result = columnVal.search(search) < 0 ? true : false;
+        break;
+      case "Begins with":
+        result = columnVal.toLowerCase().startsWith(val.toLowerCase()) ? true : false;
+        break;
+      case "Ends with":
+        result = columnVal.toLowerCase().endsWith(val.toLowerCase()) ? true : false;
+        break;
+      case "Equals":
+        result = columnVal == val ? true : false;
+        break;
+      case "Does not equal":
+        result = columnVal != val ? true : false;
+        break;
+      case "Blank":
+        result = columnVal === "" ? true : false;
+        break;
+      case "Not blank":
+        result = columnVal !== "" ? true : false;
+        break;
+      case "Greater then":
+        result = columnVal > val ? true : false;
+        break;
+      case "Greater then or equel to":
+        result = columnVal >= val ? true : false;
+        break;
+      case "Less then":
+        result = columnVal < val ? true : false;
+        break;
+      case "Less then or equel to":
+        result = columnVal <= val ? true : false;
+        break;
+      default:
+        result = true;
+        break;
+    }
+    return result;
+  }
+}
+
 export const getFilterFn = <T,>(): FilterFn<T> => {
   return (
     row,
@@ -48,6 +106,7 @@ export const getFilterFn = <T,>(): FilterFn<T> => {
     value,
     addMeta
   ) => {
+    console.log("hey, i'm the custom conditional filters", value);
     // Rank the item
     const itemRank = rankItem(row.getValue(columnId), value);
 

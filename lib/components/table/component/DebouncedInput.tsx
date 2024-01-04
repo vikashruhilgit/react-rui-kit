@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+
+import { Input } from "../../Input";
 
 type Props = {
   value: string | number
@@ -30,7 +32,7 @@ export const DebouncedInput: React.FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
-  return <input {...props} value={value} onChange={handleInputChange} />
+  return <Input label="" {...props} value={value} onChange={handleInputChange} />
 }
 
 export default DebouncedInput

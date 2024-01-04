@@ -46,18 +46,17 @@ function getRowGroup<T extends RowData>(row: Row<T>, tg?: TableGroup) {
 
 type Props<T extends RowData> = {
   table: Table<T>
-  tableGroup?: TableGroup
+  tableGroup?: TableGroup;
+  enableResize?: boolean
 }
 
 export function CustomTable<T extends RowData>({
   table,
   tableGroup,
+  enableResize
 }: Props<T>) {
   const [headerGroups] = getTableHeaderGroups(table, tableGroup);
   const headerDepth = headerGroups.length;
-
-
-
 
   const checkNumberType = (columnId: string) => {
     return typeof table
@@ -71,7 +70,6 @@ export function CustomTable<T extends RowData>({
   }
 
   const renderFiltersPopover = (header: Header<T, unknown>) => {
-
     return <>
       {header.column.getCanFilter() ? (
         <Popover className="relative inline">
@@ -173,13 +171,14 @@ export function CustomTable<T extends RowData>({
                         </div>
                       </>
                     )}
-                    <section
-                      className="absolute right-0 top-0 h-full select-none touch-non cursor-ew-resize flex "
-                      onMouseDown={header.getResizeHandler()}
-                      onTouchStart={header.getResizeHandler()}
-                    >
-                      <section className='bg-gray-300 w-0.5 hover:w-0.75 hover:bg-gray-500 h-2/5 self-center rounded-[100%]'></section>
-                    </section>
+                    {enableResize &&
+                      <section
+                        className="absolute right-0 top-0 h-full select-none touch-non cursor-ew-resize flex "
+                        onMouseDown={header.getResizeHandler()}
+                        onTouchStart={header.getResizeHandler()}
+                      >
+                        <section className='bg-gray-300 w-0.5 hover:w-0.75 hover:bg-gray-500 h-2/5 self-center rounded-[100%]'></section>
+                      </section>}
                     {/* {!header.isPlaceholder && header.column.getCanPin() && (
                   <TablePins
                     isPinned={header.column.getIsPinned()}

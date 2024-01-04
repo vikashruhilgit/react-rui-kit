@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, useState } from "react";
 
-import { Input } from "../../Input"
 import { Checkbox } from "../../Checkbox";
+import DebouncedInput from "./DebouncedInput";
 
 export interface MultiTextSearchItem {
   id: string;
@@ -25,8 +25,8 @@ export const MultiTextSearch = <T,>({
 
   const [query, setQuery] = useState('');
 
-  const changeHandler = (val: string) => {
-    setQuery(val)
+  const changeHandler = (val: string | number) => {
+    setQuery(val as string)
   }
 
   const filteredItem =
@@ -45,7 +45,7 @@ export const MultiTextSearch = <T,>({
   }
 
   return <section className="p-2">
-    <Input label="" placeholder={placeholder} onChange={(e) => changeHandler(e.target.value)} />
+    <DebouncedInput value={""} placeholder={placeholder} onChange={changeHandler} />
     <section className="h-40 overflow-y-scroll">
       <Checkbox items={filteredItem} dense={true} onChange={checkboxHandler} />
     </section>

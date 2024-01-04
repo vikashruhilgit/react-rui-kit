@@ -27,7 +27,7 @@ export const TableAction = <T,>({
     )
   }
 
-  return <div className="p-2 flex items-start gap-4">
+  return <div className="p-2 flex items-center gap-4 al">
     <DebouncedInput
       value={globalFilter ?? ''}
       onChange={value => setGlobalFilter(String(value))}
@@ -39,7 +39,7 @@ export const TableAction = <T,>({
         <>
           <Popover.Button
             className={`
-          group inline-flex items-center rounded-md  p-1 focus-visible:outline-none border border-gray-300`}
+          group inline-flex items-center rounded-md  px-2.5 py-1 focus-visible:outline-none border border-gray-300`}
           >
             <span>Filters</span>
             {open ? <ChevronDownIcon

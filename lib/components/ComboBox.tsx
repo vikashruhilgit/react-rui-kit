@@ -86,7 +86,7 @@ export const ComboBox: FC<ComboBoxProps> = ({
   const listInputAndButton = () => (
     <>
       <Combobox.Input
-        className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+        className={` w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6`}
         onChange={(event) => setQuery(event.target.value)}
         displayValue={(item: ComboBoxItem) => item?.name}
       />
@@ -108,7 +108,7 @@ export const ComboBox: FC<ComboBoxProps> = ({
     ({ selected, active }: ComboBoxState) =>
     (
       <>
-        <div className="flex items-center">
+        <div className={`flex items-center`}>
           {avatar && <img src={person.avatar} alt="" className="h-5 w-5 flex-shrink-0 rounded-full" />}
           <span
             className={`${selected ? 'font-semibold' : 'font-normal'} ${avatar && 'ml-3'} block truncate`}
@@ -130,7 +130,6 @@ export const ComboBox: FC<ComboBoxProps> = ({
     )
 
   return (
-
     <Combobox as="div" value={list} onChange={changeHandler}>
       {label && <Combobox.Label className="block text-sm font-medium leading-6 text-gray-900">{label}</Combobox.Label>}
       <div className={`relative ${label && 'mt-2'} `}>

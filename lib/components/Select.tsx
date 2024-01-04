@@ -87,7 +87,7 @@ export const Select: FC<SelectProps> = ({
       <span className="flex items-center">
         {avatar &&
           <img onClick={(e) => onAvatarClick(list, e)} src={list?.avatar} alt="" className={`${onAvatarAction && "cursor-pointer"} ${list.id !== -1 ? 'h-5 w-5' : ""} flex-shrink-0 rounded-full`} />}
-        <span className={`${avatar ? "ml-3" : ""} block truncate ${error && 'text-red-400'}`}>{list?.name}</span>
+        <span className={`${avatar ? "ml-3" : ""} block truncate ${error && 'text-red-400'} ${list.id === -1 && "text-gray-300"}`}>{list?.name}</span>
       </span>
       <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
         <svg aria-hidden="true" className="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >

@@ -27,12 +27,20 @@ import "../../main.css";
 interface TableProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
+  testMode?: boolean;
+  enableResize?: boolean;
+  serverSideFilter?: boolean;
+  onFilterChange?: (filter: ColumnFiltersState) => void;
 }
 
 
 export const Table = <T,>({
   columns,
   data,
+  testMode,
+  enableResize,
+  serverSideFilter,
+  onFilterChange
 }: TableProps<T>) => {
 
   const rerender = useReducer(() => ({}), {})[1]
@@ -44,7 +52,7 @@ export const Table = <T,>({
 
   const [columnVisibility, setColumnVisibility] = useState({});
   const [grouping, setGrouping] = useState<GroupingState>([]);
-  const [isSplit, setIsSplit] = useState(false);
+  // const [isSplit, setIsSplit] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
   const [columnPinning, setColumnPinning] = useState({});
   const [globalFilter, setGlobalFilter] = useState('');
@@ -95,9 +103,10 @@ export const Table = <T,>({
     debugTable: true,
     debugHeaders: true,
     debugColumns: true,
+    manualFiltering: serverSideFilter
   })
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (table.getState().columnFilters[0]?.id === 'fullName') {
       if (table.getState().sorting[0]?.id !== 'fullName') {
         table.setSorting([{ id: 'fullName', desc: false }])
@@ -105,28 +114,43 @@ export const Table = <T,>({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [table.getState().columnFilters[0]?.id])
+  }, [table.getState().columnFilters[0]?.id]) */
+
+  const tableFilters = table.getState().columnFilters;
+
+  useEffect(() => {
+    onFilterChange && onFilterChange(tableFilters);
+  }, [tableFilters, onFilterChange])
 
   return (
     <>
       <TableAction table={table} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
-      <div className={`flex justify-center ${isSplit ? 'gap-4' : ''}`}>
-        {isSplit ? <CustomTable table={table} tableGroup="left" /> : null}
+      <div className={`flex justify-center`}>
+        {/* <div className={`flex justify-center ${isSplit ? 'gap-4' : ''}`}>
+        {isSplit ? <CustomTable table={table} tableGroup="left" /> : null} 
         <CustomTable
           table={table}
           tableGroup={isSplit ? 'center' : undefined}
+        /> */}
+        <CustomTable
+          table={table}
+          enableResize={enableResize}
         />
-        {isSplit ? <CustomTable table={table} tableGroup="right" /> : null}
+        {/* {isSplit ? <CustomTable table={table} tableGroup="right" /> : null} */}
       </div>
-      <div className="p-2" />
-      <ActionButtons
-        getSelectedRowModel={table.getSelectedRowModel}
-        refreshData={refreshData}
-        rerender={rerender}
-        rowSelection={rowSelection}
-      />
-      <div className="p-2" />
-      <pre>{JSON.stringify(table.getState(), null, 2)}</pre>
+      {testMode &&
+        <>
+          <div className="p-2" />
+          <ActionButtons
+            getSelectedRowModel={table.getSelectedRowModel}
+            refreshData={refreshData}
+            rerender={rerender}
+            rowSelection={rowSelection}
+          />
+          <div className="p-2" />
+          <pre>{JSON.stringify(table.getState(), null, 2)}</pre>
+        </>
+      }
     </>
   )
 }

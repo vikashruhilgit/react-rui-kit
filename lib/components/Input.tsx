@@ -27,7 +27,7 @@ export const Input: FC<InputProps> = ({
 }) => {
   const labelId = label.toLowerCase().replace(" ", "")
   return (
-    <section>
+    <section className="flex-1">
       <div className="flex justify-between">
         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
           {label}

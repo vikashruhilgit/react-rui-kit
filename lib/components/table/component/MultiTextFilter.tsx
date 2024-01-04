@@ -32,11 +32,14 @@ export const MultiTextFilter = <T,>({
   const handleSelection = (item: MultiTextFilterItem) => {
     column.columnDef.filterFn = "arrIncludesSome";
     let existingFilter = columnFilterValue as string[] || [];
+    if (!Array.isArray(columnFilterValue)) {
+      existingFilter = [columnFilterValue as string]
+    }
 
     if (item.isChecked) {
       column.setFilterValue([...existingFilter as string[], item.label]);
     } else {
-      existingFilter = existingFilter.filter((single: string) => single !== item.label);
+      existingFilter = existingFilter && existingFilter.filter((single: string) => single !== item.label);
       column.setFilterValue([...existingFilter]);
     }
   }

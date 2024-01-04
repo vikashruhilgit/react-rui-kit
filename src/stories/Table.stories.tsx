@@ -28,6 +28,8 @@ export const Example: Story = {
   args: {
     columns: addIndeterminateCheckbox(columns),
     data: makeData(1000),
+    testMode: true,
+    enableResize: true
   },
   render: (args) => {
     return <Table<Person> {...args} />
